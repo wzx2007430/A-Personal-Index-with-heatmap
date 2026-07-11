@@ -154,6 +154,7 @@ export type SocialLinks = {
   linkedin?: string
   email?: string
   rss?: boolean
+    blog?: string
 }
 
 export type GiscusConfig = {

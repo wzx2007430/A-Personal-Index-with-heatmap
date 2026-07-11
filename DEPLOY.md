@@ -1,4 +1,4 @@
-﻿# MultiTerm Astro 博客 — Nginx 部署手册
+# MultiTerm Astro 博客 — Nginx 部署手册
 
 > 域名：`multiterm.stelclementine.com`  
 > Node 端口：`4321`  

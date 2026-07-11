@@ -1,4 +1,4 @@
-﻿{
+{
     "name":  "multiterm-astro",
     "description":  "A terminal-inspired coding blog built with Astro.",
     "type":  "module",

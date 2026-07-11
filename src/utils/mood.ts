@@ -1,4 +1,4 @@
-﻿// src/utils/mood.ts — Shared mood data utilities
+// src/utils/mood.ts — Shared mood data utilities
 import fs from "node:fs";
 import path from "node:path";
 

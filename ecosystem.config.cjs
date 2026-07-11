@@ -1,4 +1,4 @@
-﻿module.exports = {
+module.exports = {
   apps: [{
     name: "multiterm-astro",
     script: "dist/server/entry.mjs",

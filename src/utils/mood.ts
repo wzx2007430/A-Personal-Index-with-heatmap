@@ -1,4 +1,4 @@
-// src/utils/mood.ts — Shared mood data utilities
+// src/utils/mood.ts 鈥?Shared mood data utilities
 import fs from "node:fs";
 import path from "node:path";
 
@@ -39,7 +39,7 @@ export function writeMoods(entries: MoodEntry[]): void {
 
 /** Validate Authorization Bearer token. Returns false (deny) when secret is not configured. */
 export function validateAuthToken(request: Request): boolean {
-  const secret = import.meta.env.MOOD_SECRET;
+  const secret = process.env.MOOD_SECRET;
   if (!secret) return false; // fail-secure: deny when unconfigured
   const authHeader = request.headers.get("Authorization") ?? "";
   const token = authHeader.replace(/^Bearer\s+/i, "");

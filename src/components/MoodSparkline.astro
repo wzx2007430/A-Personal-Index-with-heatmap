@@ -1,0 +1,97 @@
+---
+import { readMoods } from "~/utils/mood";
+
+const moods = readMoods();
+const moodMap = new Map<string, number>();
+for (const entry of moods) {
+  moodMap.set(entry.date, entry.mood);
+}
+
+// Generate last 60 days
+const today = new Date();
+today.setHours(0, 0, 0, 0);
+const points: { x: number; y: number; mood: number | null }[] = [];
+const days = 60;
+for (let i = days - 1; i >= 0; i--) {
+  const d = new Date(today);
+  d.setDate(d.getDate() - i);
+  const dateStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+  const mood = moodMap.get(dateStr) ?? null;
+  points.push({
+    x: (i / (days - 1)) * 100,
+    y: mood !== null ? ((5 - mood) / 4) * 100 : null,
+    mood,
+  });
+}
+
+// Build smooth SVG path (catmull-rom style using cubic bezier)
+const w = 120;
+const h = 20;
+const pad = 1;
+
+function mid(a: number, b: number) { return (a + b) / 2; }
+
+const validPoints = points.filter((p) => p.mood !== null && p.y !== null) as { x: number; y: number; mood: number }[];
+const gaps = validPoints.length > 0;
+let linePath = "";
+let fillPath = "";
+
+if (validPoints.length >= 2) {
+  // Start
+  linePath = `M${validPoints[0].x * w / 100} ${pad + validPoints[0].y * h / 100}`;
+  fillPath = `M${validPoints[0].x * w / 100} ${h} L${validPoints[0].x * w / 100} ${pad + validPoints[0].y * h / 100}`;
+
+  for (let i = 0; i < validPoints.length - 1; i++) {
+    const p0 = validPoints[i];
+    const p1 = validPoints[i + 1];
+    const x0 = p0.x * w / 100;
+    const y0 = pad + p0.y * h / 100;
+    const x1 = p1.x * w / 100;
+    const y1 = pad + p1.y * h / 100;
+    const cx1 = mid(x0, x1);
+    const cy1 = y0;
+    const cx2 = mid(x0, x1);
+    const cy2 = y1;
+    linePath += ` C${cx1} ${cy1}, ${cx2} ${cy2}, ${x1} ${y1}`;
+    fillPath += ` C${cx1} ${cy1}, ${cx2} ${cy2}, ${x1} ${y1}`;
+  }
+
+  // Close fill path
+  const last = validPoints[validPoints.length - 1];
+  fillPath += ` L${last.x * w / 100} ${h} Z`;
+} else if (validPoints.length === 1) {
+  const cx = validPoints[0].x * w / 100;
+  const cy = pad + validPoints[0].y * h / 100;
+  linePath = `M${cx} ${cy}`;
+  fillPath = `M${cx} ${h} L${cx} ${cy} Z`;
+}
+---
+
+<span class="inline-flex items-center gap-1.5 shrink-0">
+  <svg
+    width={w}
+    height={h}
+    viewBox={`0 0 ${w} ${h}`}
+    class="align-middle"
+    aria-label="心情趋势"
+  >
+    {gaps && validPoints.length > 0 && (
+      <>
+        <path
+          d={fillPath}
+          fill="var(--theme-accent)"
+          opacity="0.12"
+        />
+        <path
+          d={linePath}
+          fill="none"
+          stroke="var(--theme-accent)"
+          stroke-width="1.2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          opacity="0.8"
+        />
+      </>
+    )}
+  </svg>
+</span>

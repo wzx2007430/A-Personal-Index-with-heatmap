@@ -1,6 +1,7 @@
-﻿---
+---
 import { Image } from "astro:assets"
 import GitHubActivityCalendar from "~/components/GitHubActivityCalendar.astro"
+import MoodSparkline from "~/components/MoodSparkline.astro"
 import MoodHeatmap from "~/components/MoodHeatmap.astro"
 import type { FrontmatterImage } from "~/types"
 
@@ -34,7 +35,7 @@ const { avatarImage, githubCalendar } = Astro.props
       </div>
     </div>
   </div>
-  <h2 class="text-accent text-lg font-semibold mb-3">我的心情</h2>
+  <h2 class="text-accent text-lg font-semibold mb-3 flex items-center gap-2">我的心情 <MoodSparkline /></h2>
   <div class="mb-6">
     <MoodHeatmap />
   </div>

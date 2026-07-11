@@ -85,21 +85,21 @@ const svgHeight = height + pad * 2;
 
 function getMoodLabel(mood: number): string {
   const labels: Record<number, string> = {
-    1: "\u5F88\u5DEE",
-    2: "\u4E0D\u592A\u597D",
-    3: "\u4E00\u822C",
-    4: "\u8FD8\u884C",
-    5: "\u6781\u597D",
+    1: "很差",
+    2: "不太好",
+    3: "一般",
+    4: "还行",
+    5: "极好",
   };
   return labels[mood] || "";
 }
 
 const legendItems = [
-  { label: "\u5F88\u5DEE", color: colorScale[1] },
-  { label: "\u4E0D\u592A\u597D", color: colorScale[2] },
-  { label: "\u4E00\u822C", color: colorScale[3] },
-  { label: "\u8FD8\u884C", color: colorScale[4] },
-  { label: "\u6781\u597D", color: colorScale[5] },
+  { label: "很差", color: colorScale[1] },
+  { label: "不太好", color: colorScale[2] },
+  { label: "一般", color: colorScale[3] },
+  { label: "还行", color: colorScale[4] },
+  { label: "极好", color: colorScale[5] },
 ];
 
 const totalDays = moods.length;
@@ -129,7 +129,7 @@ const currentStreak = calculateStreak(moods);
           {week.map((cell, dayIndex) => (
             <g class="mood-cell">
               <title>
-                {cell.date}{cell.mood !== null ? " \u00B7 " + getMoodLabel(cell.mood) : " \u00B7 \u672A\u8BB0\u5F55"}
+                {cell.date}{cell.mood !== null ? " · " + getMoodLabel(cell.mood) : " · 未记录"}
               </title>
               <rect
                 class="stroke-foreground/10 mood-rect"
@@ -151,7 +151,7 @@ const currentStreak = calculateStreak(moods);
   </div>
   <footer class="flex flex-col sm:flex-row sm:justify-between gap-x-1 gap-y-2">
     <div>
-      \u603B\u8BA1 <strong>{totalDays}</strong> \u5929\u8BB0\u5F55 \u00B7 \u8FDE\u7EED <strong>{currentStreak}</strong> \u5929
+      总计 <strong>{totalDays}</strong> 天记录 · 连续 <strong>{currentStreak}</strong> 天
     </div>
     <div class="flex items-center gap-x-2 gap-y-1 text-[11px] flex-wrap">
       {legendItems.map((item) => (

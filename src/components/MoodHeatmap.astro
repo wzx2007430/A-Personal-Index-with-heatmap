@@ -64,12 +64,12 @@ const filteredMonthLabels = monthLabels.filter(({ weekIndex }, index, labels) =>
 });
 
 const colorScale = [
-  "#1f2a40",
-  "#233a30",
-  "#2b553d",
-  "#36754c",
-  "#46995d",
-  "#4ade80",
+  "#ebedf0",  // 0: unrecorded
+  "#ef4444",  // 1
+  "#fbbf24",  // 2
+  "#f472b6",  // 3
+  "#38bdf8",  // 4
+  "#16a34a",  // 5
 ];
 
 const blockSize = 12;
@@ -84,7 +84,7 @@ const svgWidth = width + pad * 2;
 const svgHeight = height + pad * 2;
 
 function getMoodLabel(mood: number): string {
-  const labels = ["", "\u5F88\u5DEE", "\u4E0D\u592A\u597D", "\u4E00\u822C", "\u8FD8\u884C", "\u6781\u597D"];
+  const labels = ["", "\u5F88差", "不太好", "一般", "还行", "极好"];
   return labels[mood] || "";
 }
 
@@ -115,7 +115,7 @@ const currentStreak = calculateStreak(moods);
           {week.map((cell, dayIndex) => (
             <g class="mood-cell">
               <title>
-                {cell.date}{cell.mood !== null ? " \u00B7 " + getMoodLabel(cell.mood) : " \u00B7 \u672A\u8BB0\u5F55"}
+                {cell.date}{cell.mood !== null ? " · " + getMoodLabel(cell.mood) : " · 未记录"}
               </title>
               <rect
                 class="stroke-foreground/10 mood-rect"
@@ -137,16 +137,16 @@ const currentStreak = calculateStreak(moods);
   </div>
   <footer class="flex flex-col sm:flex-row sm:justify-between gap-x-1 gap-y-2">
     <div>
-      \u603B\u8BA1 <strong>{totalDays}</strong> \u5929\u8BB0\u5F55 \u00B7 \u8FDE\u7EED <strong>{currentStreak}</strong> \u5929
+      总计 <strong>{totalDays}</strong> 天记录 · 连续 <strong>{currentStreak}</strong> 天
     </div>
     <div class="flex items-center gap-[3px]">
-      <span class="mr-1.5">\u5DEE</span>
+      <span class="mr-1.5">差</span>
       {colorScale.slice(1).map((color) => (
         <svg width={blockSize} height={blockSize}>
           <rect class="stroke-foreground/10" width={blockSize} height={blockSize} fill={color} rx={blockRadius} ry={blockRadius} />
         </svg>
       ))}
-      <span class="ml-1.5">\u6781\u597D</span>
+      <span class="ml-1.5">极好</span>
     </div>
   </footer>
 </article>

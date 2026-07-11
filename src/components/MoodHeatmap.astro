@@ -64,12 +64,12 @@ const filteredMonthLabels = monthLabels.filter(({ weekIndex }, index, labels) =>
 });
 
 const colorScale = [
-  "#ebedf0",  // 0: unrecorded
-  "#ef4444",  // 1
-  "#fbbf24",  // 2
-  "#f472b6",  // 3
-  "#38bdf8",  // 4
-  "#16a34a",  // 5
+  "#ebedf0",
+  "#ef4444",
+  "#fbbf24",
+  "#f472b6",
+  "#38bdf8",
+  "#16a34a",
 ];
 
 const blockSize = 12;
@@ -84,9 +84,23 @@ const svgWidth = width + pad * 2;
 const svgHeight = height + pad * 2;
 
 function getMoodLabel(mood: number): string {
-  const labels = ["", "\u5F88差", "不太好", "一般", "还行", "极好"];
+  const labels: Record<number, string> = {
+    1: "\u5F88\u5DEE",
+    2: "\u4E0D\u592A\u597D",
+    3: "\u4E00\u822C",
+    4: "\u8FD8\u884C",
+    5: "\u6781\u597D",
+  };
   return labels[mood] || "";
 }
+
+const legendItems = [
+  { label: "\u5F88\u5DEE", color: colorScale[1] },
+  { label: "\u4E0D\u592A\u597D", color: colorScale[2] },
+  { label: "\u4E00\u822C", color: colorScale[3] },
+  { label: "\u8FD8\u884C", color: colorScale[4] },
+  { label: "\u6781\u597D", color: colorScale[5] },
+];
 
 const totalDays = moods.length;
 const currentStreak = calculateStreak(moods);
@@ -115,7 +129,7 @@ const currentStreak = calculateStreak(moods);
           {week.map((cell, dayIndex) => (
             <g class="mood-cell">
               <title>
-                {cell.date}{cell.mood !== null ? " · " + getMoodLabel(cell.mood) : " · 未记录"}
+                {cell.date}{cell.mood !== null ? " \u00B7 " + getMoodLabel(cell.mood) : " \u00B7 \u672A\u8BB0\u5F55"}
               </title>
               <rect
                 class="stroke-foreground/10 mood-rect"
@@ -137,16 +151,15 @@ const currentStreak = calculateStreak(moods);
   </div>
   <footer class="flex flex-col sm:flex-row sm:justify-between gap-x-1 gap-y-2">
     <div>
-      总计 <strong>{totalDays}</strong> 天记录 · 连续 <strong>{currentStreak}</strong> 天
+      \u603B\u8BA1 <strong>{totalDays}</strong> \u5929\u8BB0\u5F55 \u00B7 \u8FDE\u7EED <strong>{currentStreak}</strong> \u5929
     </div>
-    <div class="flex items-center gap-[3px]">
-      <span class="mr-1.5">差</span>
-      {colorScale.slice(1).map((color) => (
-        <svg width={blockSize} height={blockSize}>
-          <rect class="stroke-foreground/10" width={blockSize} height={blockSize} fill={color} rx={blockRadius} ry={blockRadius} />
-        </svg>
+    <div class="flex items-center gap-x-2 gap-y-1 text-[11px] flex-wrap">
+      {legendItems.map((item) => (
+        <span class="flex items-center gap-0.5">
+          <svg width="7" height="7"><circle cx="3.5" cy="3.5" r="3.5" fill={item.color} /></svg>
+          {item.label}
+        </span>
       ))}
-      <span class="ml-1.5">极好</span>
     </div>
   </footer>
 </article>

@@ -7,18 +7,15 @@ for (const entry of moods) {
   moodMap.set(entry.date, entry.mood);
 }
 
-// Generate last year of dates
 const today = new Date();
 today.setHours(0, 0, 0, 0);
 const oneYearAgo = new Date(today);
 oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
 
-// Find start Sunday
 const startDate = new Date(oneYearAgo);
 const dayOfWeek = startDate.getDay();
 startDate.setDate(startDate.getDate() - dayOfWeek);
 
-// Build grid cells
 interface Cell {
   date: string;
   level: number;
@@ -30,30 +27,21 @@ const cursor = new Date(startDate);
 while (cursor <= today) {
   const dateStr = formatDate(cursor);
   const mood = moodMap.get(dateStr) ?? null;
-  cells.push({
-    date: dateStr,
-    level: mood ?? 0,
-    mood,
-  });
+  cells.push({ date: dateStr, level: mood ?? 0, mood });
   cursor.setDate(cursor.getDate() + 1);
 }
 
-// Group into weeks
 const weeks: Cell[][] = [];
 for (let i = 0; i < cells.length; i += 7) {
   weeks.push(cells.slice(i, i + 7));
 }
 
-// Month labels
 const MONTH_NAMES = [
   "Jan", "Feb", "Mar", "Apr", "May", "Jun",
   "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
 ];
 
-interface MonthLabel {
-  weekIndex: number;
-  label: string;
-}
+interface MonthLabel { weekIndex: number; label: string; }
 
 const monthLabels: MonthLabel[] = [];
 weeks.forEach((week, weekIndex) => {
@@ -70,31 +58,20 @@ weeks.forEach((week, weekIndex) => {
 
 const filteredMonthLabels = monthLabels.filter(({ weekIndex }, index, labels) => {
   const minWeeks = 3;
-  if (index === 0) {
-    return labels[1] && labels[1].weekIndex - weekIndex >= minWeeks;
-  }
-  if (index === labels.length - 1) {
-    return weeks.length - weekIndex >= minWeeks;
-  }
+  if (index === 0) return labels[1] && labels[1].weekIndex - weekIndex >= minWeeks;
+  if (index === labels.length - 1) return weeks.length - weekIndex >= minWeeks;
   return true;
 });
 
-// Color scale: 0=background(unrecorded), 1-5=mood gradient
-function calcColorScale(steps: number): string[] {
-  const start = "var(--theme-background)";
-  const end = "var(--theme-accent)";
-  return Array.from({ length: steps }, (_, i) => {
-    if (i === 0) return start;
-    if (i === steps - 1) return end;
-    const pos = (i / (steps - 1)) * 100;
-    return `color-mix(in oklab, ${end} ${pos.toFixed(2)}%, ${start})`;
-  });
-}
+const colorScale = [
+  "#1f2a40",
+  "#233a30",
+  "#2b553d",
+  "#36754c",
+  "#46995d",
+  "#4ade80",
+];
 
-const maxLevel = 5;
-const colorScale = calcColorScale(maxLevel + 1); // 6 colors: 0-5
-
-// SVG dimensions
 const blockSize = 12;
 const blockMargin = 4;
 const blockRadius = 2;
@@ -106,19 +83,11 @@ const pad = 4;
 const svgWidth = width + pad * 2;
 const svgHeight = height + pad * 2;
 
-// Mood labels for tooltip
 function getMoodLabel(mood: number): string {
-  const labels: Record<number, string> = {
-    1: "😞 很差",
-    2: "🙁 不太好",
-    3: "😐 一般",
-    4: "🙂 还行",
-    5: "😊 极好",
-  };
+  const labels = ["", "\u5F88\u5DEE", "\u4E0D\u592A\u597D", "\u4E00\u822C", "\u8FD8\u884C", "\u6781\u597D"];
   return labels[mood] || "";
 }
 
-// Stats
 const totalDays = moods.length;
 const currentStreak = calculateStreak(moods);
 ---
@@ -129,7 +98,6 @@ const currentStreak = calculateStreak(moods);
       class="block visible"
       width={svgWidth} height={svgHeight} viewBox={`${-pad} ${-pad} ${svgWidth} ${svgHeight}`}
     >
-      {/* Month labels */}
       <g>
         {filteredMonthLabels.map(({ label, weekIndex }) => (
           <text
@@ -142,13 +110,12 @@ const currentStreak = calculateStreak(moods);
           </text>
         ))}
       </g>
-      {/* Grid */}
       {[...weeks].reverse().map((week, reverseWeekIndex) => (
         <g transform={`translate(${(blockSize + blockMargin) * reverseWeekIndex}, 0)`}>
           {week.map((cell, dayIndex) => (
             <g class="mood-cell">
               <title>
-                {cell.date}{cell.mood !== null ? " · " + getMoodLabel(cell.mood) : " · 未记录"}
+                {cell.date}{cell.mood !== null ? " \u00B7 " + getMoodLabel(cell.mood) : " \u00B7 \u672A\u8BB0\u5F55"}
               </title>
               <rect
                 class="stroke-foreground/10 mood-rect"
@@ -168,26 +135,18 @@ const currentStreak = calculateStreak(moods);
       ))}
     </svg>
   </div>
-  {/* Footer: stats + 5-level legend */}
   <footer class="flex flex-col sm:flex-row sm:justify-between gap-x-1 gap-y-2">
     <div>
-      总计 <strong>{totalDays}</strong> 天记录 · 连续 <strong>{currentStreak}</strong> 天
+      \u603B\u8BA1 <strong>{totalDays}</strong> \u5929\u8BB0\u5F55 \u00B7 \u8FDE\u7EED <strong>{currentStreak}</strong> \u5929
     </div>
     <div class="flex items-center gap-[3px]">
-      <span class="mr-1.5">差</span>
+      <span class="mr-1.5">\u5DEE</span>
       {colorScale.slice(1).map((color) => (
         <svg width={blockSize} height={blockSize}>
-          <rect
-            class="stroke-foreground/10"
-            width={blockSize}
-            height={blockSize}
-            fill={color}
-            rx={blockRadius}
-            ry={blockRadius}
-          />
+          <rect class="stroke-foreground/10" width={blockSize} height={blockSize} fill={color} rx={blockRadius} ry={blockRadius} />
         </svg>
       ))}
-      <span class="ml-1.5">极好</span>
+      <span class="ml-1.5">\u6781\u597D</span>
     </div>
   </footer>
 </article>

@@ -158,7 +158,7 @@ const config: SiteConfig = {
     bluesky: 'https://github.com/stelcodes/multiterm-astro',
     twitter: 'https://github.com/stelcodes/multiterm-astro',
     rss: true,
-      blog: 'https://blog.wxuann.top', in the footer
+      blog: 'https://blog.wxuann.top',
   },
   // Configuration for Giscus comments.
   // To set up Giscus, follow the instructions at https://giscus.app/

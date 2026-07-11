@@ -1,0 +1,72 @@
+﻿---
+export const prerender = false;
+import Layout from "~/layouts/Layout.astro";
+import BlockHeader from "~/components/BlockHeader.astro";
+import MoodHeatmap from "~/components/MoodHeatmap.astro";
+import siteConfig from "~/site.config";
+
+const siteUrl = siteConfig.site.replace(/\/+$/, "");
+const exampleBody = `{&quot;mood&quot;:&quot;已选择的值&quot;,&quot;date&quot;:&quot;当前日期&quot;}`;
+---
+
+<Layout title="心情热力图">
+  <div class="mb-6">
+    <BlockHeader>心情热力图</BlockHeader>
+  </div>
+
+  <p class="text-foreground/80 mb-6 leading-relaxed">
+    记录每天的心情变化，看看过去一年的情绪轨迹。通过 iOS 快捷指令可以快速记录当天心情。
+  </p>
+
+  <div class="border border-foreground/10 rounded-xl p-4 md:p-6 mb-8 bg-foreground/[0.02]">
+    <MoodHeatmap />
+  </div>
+
+  <!-- iOS Shortcut Instructions -->
+  <div class="mb-4">
+    <BlockHeader>📱 iOS 快捷指令配置</BlockHeader>
+  </div>
+  <div class="prose prose-sm max-w-none text-foreground/80 leading-relaxed">
+    <p>使用以下步骤在 iOS「快捷指令」App 中创建一条快捷指令，即可一键记录每日心情：</p>
+
+    <ol class="list-decimal list-inside space-y-3 mt-3">
+      <li>
+        <strong>「从列表中选择」</strong>
+        <span class="block ml-5 mt-1 text-foreground/60">
+          提示：「今天心情如何？」<br />
+          选项：😊 很好(5) / 🙂 还行(4) / 😐 一般(3) / 🙁 不太好(2) / 😞 很差(1)
+        </span>
+      </li>
+      <li>
+        <strong>「文本」</strong>
+        <span class="block ml-5 mt-1 text-foreground/60">
+          设置为：<code class="!text-foreground/80">{exampleBody}</code><br />
+          提示：使用「当前日期」变量，格式化为 yyyy-MM-dd
+        </span>
+      </li>
+      <li>
+        <strong>「获取 URL 内容」</strong>
+        <span class="block ml-5 mt-1 text-foreground/60">
+          方法：POST<br />
+          URL：<code class="!text-foreground/80">{siteUrl}/api/mood</code><br />
+          头部：Content-Type: application/json<br />
+          头部：Authorization: Bearer YOUR_SECRET<br />
+          请求体：上一步的文本变量
+        </span>
+      </li>
+      <li>
+        <strong>「显示通知」</strong>
+        <span class="block ml-5 mt-1 text-foreground/60">
+          通知内容：「今日心情已记录 🎉」
+        </span>
+      </li>
+    </ol>
+
+    <div class="mt-5 p-4 border border-yellow/30 rounded-xl bg-yellow/[0.05]">
+      <p class="!my-0">
+        ⚠️ 请将 <code class="!text-foreground/80">YOUR_SECRET</code> 替换为环境变量
+        <code class="!text-foreground/80">MOOD_SECRET</code> 的实际值，并确保服务端已正确配置该环境变量。
+      </p>
+    </div>
+  </div>
+</Layout>

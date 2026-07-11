@@ -31,10 +31,43 @@ data/
 ## 编码规范 [重要]
 
 - **文件编码必须为 UTF-8 without BOM**
-- **禁止使用 `\\uXXXX` Unicode 转义**，直接写中文字符（"总计" 而非 "\\u603B\\u8BA1"）
-- **禁止使用 PowerShell `Set-Content` 写入 `.astro/.ts/.js` 文件**（会产生 BOM）
-- 写入源码文件使用 Python: `open(path, 'w', encoding='utf-8')` 或 Node: `fs.writeFileSync(path, content, 'utf-8')`
-- 模板（JSX）中的字符串直接写中文，前端代码块（---之间）中的 `const` 字符串也直接写中文
+- **中文字符直接写，禁止 `\\uXXXX` 转义**
+- **禁止用 PowerShell 写入项目源码文件**（会产生 BOM 或损坏中文）
+
+### 安全写入方法（三选一）
+
+**方法 1：Python 脚本（推荐）**
+先把内容写入临时 .py 文件，再执行：
+```powershell
+$py = @"
+path = r'F:\3_Code\Index\multiterm-astro\src\components\MyFile.astro'
+with open(path, 'w', encoding='utf-8') as f:
+    f.write(r"""<这里放文件内容>""")
+"@
+Set-Content temp.py -Value $py
+python temp.py
+```
+关键：内容用 `r"""..."""` 包裹，中文直接写，不用转义。
+
+**方法 2：Node REPL（js 工具）**
+```js
+var fs = await import("fs");
+var content = "这里放文件全部内容，中文直接写";
+fs.writeFileSync("F:/3_Code/Index/multiterm-astro/src/components/MyFile.astro", content, "utf-8");
+```
+注意：内容中如果包含双引号，需要用 `\"` 转义。
+
+**方法 3：Git 回退**
+如果文件被破坏，`git checkout -- path/to/file` 恢复后手动编辑。
+
+### 检查与验证
+```bash
+# 检查 BOM（应输出 2d2d2d）
+python -c "with open('file.astro','rb') as f: print(f.read(3).hex())"
+
+# 检查中文是否正常（应显示真实中文而非 \uXXXX）
+python -c "with open('file.astro','r',encoding='utf-8') as f: [print(l.strip()) for l in f if '记' in l]"
+```
 
 ## 常用命令
 ```bash

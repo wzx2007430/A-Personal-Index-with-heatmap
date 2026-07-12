@@ -234,8 +234,43 @@ if (data) {
 
 {
   fetchError ? (
-    <article class="github-calendar text-sm text-foreground/50 italic py-2">
-      GitHub 贡献数据暂不可用（API 请求失败）
+    <article class="w-max max-w-full flex flex-col gap-2 text-sm">
+      <div class="max-w-full overflow-x-auto pt-0.5" style="scrollbar-gutter: stable;">
+        <svg class="block visible" width={22*(blockSize+blockMargin)-blockMargin+pad*2} height={7*(blockSize+blockMargin)-blockMargin+labelHeight+pad*2} viewBox={`${-pad} ${-pad} ${22*(blockSize+blockMargin)-blockMargin+pad*2} ${7*(blockSize+blockMargin)-blockMargin+labelHeight+pad*2}`}>
+          <text x={0} y={0} dominant-baseline="hanging" fill="currentColor" font-size={fontSize}>GitHub</text>
+          {(() => {
+            const pattern = [
+              [0,0,1,0,0,1,0,0,1,1,1,1,1,0,0,1,1,0,0,1,1,0,0,0],
+              [1,0,0,0,0,1,0,0,0,0,1,0,1,0,0,1,1,0,0,1,1,0,0,0],
+              [1,0,0,0,0,1,0,0,0,0,1,0,1,1,1,1,1,0,0,1,1,1,1,0],
+              [1,0,1,0,0,1,0,0,0,0,1,0,1,0,0,1,1,0,0,1,1,0,0,1],
+              [1,0,1,0,0,1,0,0,0,0,1,0,1,0,0,1,1,0,0,1,1,0,0,1],
+              [0,1,1,0,0,1,0,0,0,0,1,0,1,0,0,1,0,1,1,0,1,1,1,1],
+              [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+            ];
+            const fillColor = colorScale[colorScale.length - 1];
+            const rows = [];
+            pattern.forEach((row, ri) => {
+              row.forEach((cell, ci) => {
+                if (cell) {
+                  rows.push(
+                    <rect
+                      x={ci*(blockSize+blockMargin)}
+                      y={labelHeight+ri*(blockSize+blockMargin)}
+                      width={blockSize}
+                      height={blockSize}
+                      rx={blockRadius}
+                      ry={blockRadius}
+                      fill={fillColor}
+                    />
+                  );
+                }
+              });
+            });
+            return rows;
+          })()}
+        </svg>
+      </div>
     </article>
   ) : (
     <article

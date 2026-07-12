@@ -5,4 +5,4 @@ avatarImage:
 githubCalendar: 'wzx2007430'
 ---
 
-Welcome to the example site. This site is meant to show off my custom Astro theme/template **MultiTerm** which creates a coder-ready blog complete with an interactive theme changer, RSS, sitemap, tagging, and markdown extensions.
+Welcome to **Wxuann's** homepage. This site mainly showcases my daily thoughts and status. I'll post some emotions or reflections here that aren't suitable for sharing on a blog or social media. It also serves as a navigation page for some of my other websites, such as my **Blog** and document system.

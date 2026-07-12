@@ -4,6 +4,15 @@
 
 > 线上地址：https://wxuann.top
 
+## 截图
+
+![My Mood 热力图](https://wxuann-1302199533.cos.ap-guangzhou.myqcloud.com/img/20260712103117501.png)
+
+![GitHub 贡献图](https://wxuann-1302199533.cos.ap-guangzhou.myqcloud.com/img/20260712103117500.png)
+
+![多主题切换](https://wxuann-1302199533.cos.ap-guangzhou.myqcloud.com/img/20260712103117499.png)
+
+![博客文章](https://wxuann-1302199533.cos.ap-guangzhou.myqcloud.com/img/20260712103117498.png)
 ## 功能
 
 - **心情热力图** — 类似 GitHub 贡献图，记录每日心情，五档配色，支持 iOS 快捷指令一键记录

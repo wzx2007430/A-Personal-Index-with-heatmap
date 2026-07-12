@@ -4,12 +4,12 @@ const config: SiteConfig = {
   // Absolute URL to the root of your published site, used for generating links and sitemaps.
   site: 'https://multiterm.stelclementine.com',
   // The name of your site, used in the title and for SEO.
-  title: 'MultiTerm',
+  title: 'Hi Friend | Wxuann',
   // The description of your site, used for SEO and RSS feed.
   description:
-    'A coder-ready Astro blog theme with 59 of your favorite color schemes to choose from',
+    'A personal homepage for a person who has a mixed emotion',
   // The author of the site, used in the footer, SEO, and RSS feed.
-  author: 'Katy Kookaburra',
+  author: 'Wxuann',
   // Keywords for SEO, used in the meta tags.
   tags: ['Astro', 'Terminal', 'Theme', 'MultiTerm', 'stelcodes'],
   // Path to the image used for generating social media previews.
@@ -52,7 +52,7 @@ const config: SiteConfig = {
     mode: 'select',
     // The default theme identifier, used when themeMode is "select" or "light-dark-auto".
     // Make sure this is one of the themes listed in `themes` or "auto" for "light-dark-auto" mode.
-    default: 'github-light-high-contrast',
+    default: 'light-plus',
     // Shiki themes to bundle with the site.
     // https://expressive-code.com/guides/themes/#using-bundled-themes
     // These will be used to theme the entire site along with syntax highlighting.

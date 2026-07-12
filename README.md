@@ -2,7 +2,7 @@
 
 基于 [MultiTerm](https://github.com/stelcodes/multiterm-astro) 主题的个人博客，添加了心情热力图、GitHub 贡献图、多色主题切换等功能。
 
-> 线上地址：https://test.wxuann.top
+> 线上地址：https://wxuann.top
 
 ## 功能
 
